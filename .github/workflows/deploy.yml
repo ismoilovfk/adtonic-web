@@ -1,35 +1,36 @@
-name: Deploy to GitHub Pages
+name: Deploy React App to GitHub Pages
 
 on:
   push:
     branches:
       - master
-  workflow_dispatch:  # Allows manual triggering
-
-permissions:
-  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Build application
+        run: npm run build 
+        env:
+          PUBLIC_URL: "/build"
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: build
-          branch: gh-pages
-          token: ${{ secrets.GH_PAT }} 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          user_name: 'ismoilovfk'
+          user_email: 'ismoilovf@gmail.com' 
